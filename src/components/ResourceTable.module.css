@@ -12,7 +12,20 @@
   & th:first-child { text-align: start; padding-inline-start: var(--space-4); }
   & th:last-child, & td:last-child { padding-inline-end: var(--space-4); }
   & tbody tr + tr { border-block-start: 1px solid var(--color-border); }
-  & tbody tr:has(button:hover), & tbody tr:has(button:focus-visible) { background: var(--color-accent-soft); }
+  & tbody tr {
+    transition: background var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
+  }
+  & tbody tr:hover,
+  & tbody tr:focus-within {
+    background: color-mix(in srgb, var(--color-accent-soft) 72%, transparent);
+    box-shadow: inset 3px 0 0 color-mix(in srgb, var(--color-accent) 72%, transparent);
+  }
+  & tbody tr:hover th,
+  & tbody tr:focus-within th,
+  & tbody tr:hover td.total,
+  & tbody tr:focus-within td.total {
+    color: var(--color-accent);
+  }
   & td { color: var(--color-muted); }
   & td.total { color: var(--color-text); font-weight: 700; }
 }
@@ -24,7 +37,13 @@
   color: var(--color-text);
   font-weight: 700;
   text-align: start;
+  transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
   & span { margin-inline-start: var(--space-2); color: var(--color-accent); }
+}
+.resource:hover,
+.resource:focus-visible {
+  color: var(--color-accent);
+  transform: translateX(2px);
 }
 .pod { display: inline-flex; align-items: center; min-block-size: 44px; }
 .efficiency { padding: var(--space-1) var(--space-2); background: var(--color-accent-soft); color: var(--color-accent); border-radius: var(--radius-small); }
@@ -61,5 +80,17 @@
   .table th:last-child,
   .table td:last-child {
     padding-inline-end: var(--space-3);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .table tbody tr,
+  .resource {
+    transition: none;
+  }
+
+  .resource:hover,
+  .resource:focus-visible {
+    transform: none;
   }
 }

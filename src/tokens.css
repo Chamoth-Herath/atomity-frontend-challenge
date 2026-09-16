@@ -1,21 +1,24 @@
 :root {
   color-scheme: light;
-  --color-bg: #f6f8f7;
+
+  /* Professional daytime palette — neutral slate + restrained emerald */
+  --color-bg: #f7f9f8;
   --color-surface: #ffffff;
-  --color-muted-surface: #edf2ef;
-  --color-text: #15271e;
-  --color-muted: #596a60;
-  --color-border: #dbe4de;
-  --color-accent: #19784b;
-  --color-accent-soft: #e3f7eb;
-  --color-bar: #75e9a5;
-  --color-bar-strong: #28ae68;
-  --color-error: #b03135;
-  --color-error-soft: #fff0f0;
-  --color-ink: #133b2b;
+  --color-muted-surface: #f1f4f3;
+  --color-text: #17211c;
+  --color-muted: #66726c;
+  --color-border: #dde4e0;
+  --color-accent: #147a50;
+  --color-accent-soft: #e8f5ee;
+  --color-bar: #8fd7ae;
+  --color-bar-strong: #2a9b63;
+  --color-error: #b4232b;
+  --color-error-soft: #fff0f1;
+  --color-ink: #123b2a;
   --color-on-ink: #ffffff;
   --color-transparent: transparent;
-  --shadow-panel: 0 16px 48px color-mix(in srgb, var(--color-ink) 6%, transparent);
+  --shadow-panel: 0 18px 50px rgba(18, 59, 42, 0.08);
+
   --font-body: Arial, Helvetica, sans-serif;
   --space-1: 0.25rem;
   --space-2: 0.5rem;
@@ -36,18 +39,21 @@
 
 :root[data-theme='dark'] {
   color-scheme: dark;
-  --color-bg: #101a15;
-  --color-surface: #18251e;
-  --color-muted-surface: #203228;
-  --color-text: #f2f8f4;
-  --color-muted: #a9beb0;
-  --color-border: #354b3e;
-  --color-accent: #88edb2;
-  --color-accent-soft: #243f2f;
-  --color-bar: #589e73;
-  --color-bar-strong: #8becb3;
-  --color-error: #ffabad;
-  --color-error-soft: #3f2529;
-  --color-ink: #c5f5d8;
-  --color-on-ink: #133b2b;
+
+  /* Professional night palette — deep charcoal + clear emerald */
+  --color-bg: #0d1411;
+  --color-surface: #131d18;
+  --color-muted-surface: #1a2721;
+  --color-text: #f2f6f4;
+  --color-muted: #a4b2ab;
+  --color-border: #2d3c35;
+  --color-accent: #6dd9a0;
+  --color-accent-soft: #183629;
+  --color-bar: #4f9f73;
+  --color-bar-strong: #79dfa8;
+  --color-error: #ff9ca2;
+  --color-error-soft: #3c2327;
+  --color-ink: #d4f5e2;
+  --color-on-ink: #0e1c15;
+  --shadow-panel: 0 20px 58px rgba(0, 0, 0, 0.28);
 }

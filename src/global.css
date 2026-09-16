@@ -1,6 +1,7 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
+  transition: background-color 220ms ease, color 220ms ease;
   margin: 0;
   background: var(--color-bg);
   color: var(--color-text);
@@ -36,3 +37,4 @@ button, a, h1, h2, h3, p, td, th { overflow-wrap: anywhere; }
     transition: none !important;
   }
 }
+

@@ -16,14 +16,35 @@
   gap: var(--space-3);
   min-inline-size: 0;
   margin: 0;
-  padding: 0 var(--space-2);
+  padding: var(--space-2);
   background: var(--color-transparent);
   color: var(--color-text);
-  border: 0;
-  border-radius: var(--radius-small);
+  border: 1px solid var(--color-transparent);
+  border-radius: var(--radius-medium);
   text-align: center;
-  &:is(button):hover .bar { filter: brightness(0.93); }
-  &:is(button):hover .label { color: var(--color-accent); }
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+.column:hover,
+.column:is(button):focus-visible {
+  transform: translateY(-3px);
+  background: color-mix(in srgb, var(--color-accent-soft) 62%, transparent);
+  border-color: color-mix(in srgb, var(--color-accent) 20%, var(--color-border));
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-ink) 8%, transparent);
+}
+.column:hover .bar,
+.column:is(button):focus-visible .bar {
+  filter: brightness(0.96) saturate(1.08);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--color-accent) 16%, transparent);
+}
+.column:hover .value,
+.column:is(button):focus-visible .value,
+.column:hover .label,
+.column:is(button):focus-visible .label {
+  color: var(--color-accent);
 }
 .value { font-size: clamp(0.875rem, 2cqi, 1.125rem); font-weight: 700; font-variant-numeric: tabular-nums; }
 .track { display: flex; align-items: flex-end; justify-content: center; inline-size: 100%; block-size: clamp(8rem, 22cqi, 12rem); }
@@ -33,7 +54,7 @@
   background: var(--color-bar);
   border-radius: var(--radius-medium) var(--radius-medium) var(--space-1) var(--space-1);
   transform-origin: bottom;
-  transition: filter var(--duration-fast);
+  transition: filter var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
 }
 .highest { background: var(--color-bar-strong); }
 .label { font-size: 0.875rem; min-block-size: 2.7em; line-height: 1.35; }
@@ -76,4 +97,17 @@
     font-size: 0.75rem;
     line-height: 1.25;
   }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .column,
+  .bar {
+    transition: none;
+  }
+
+  .column:hover,
+  .column:is(button):focus-visible {
+    transform: none;
+  }
+
 }
