@@ -17,6 +17,8 @@ npm install
 npm run dev
 ```
 
+After the first successful install, commit the generated `package-lock.json` so reviewers and deployment use the exact same dependency tree.
+
 Open the local address printed in the terminal. Internet access is needed to load the example data.
 
 ```bash
