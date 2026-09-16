@@ -146,3 +146,43 @@
     inset: calc(2.3rem + var(--space-4)) var(--space-2) calc(3rem + var(--space-3));
   }
 }
+
+/* Connected chart ↔ table inspection state. */
+.column {
+  transition:
+    opacity 180ms var(--ease-out),
+    filter 180ms var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+.active {
+  background: color-mix(in srgb, var(--color-accent-soft) 74%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-accent) 42%, var(--color-border));
+  box-shadow: 0 14px 28px color-mix(in srgb, var(--color-accent) 12%, transparent);
+}
+.active .bar {
+  filter: brightness(1.03) saturate(1.08);
+  box-shadow: 0 10px 24px color-mix(in srgb, var(--color-accent) 18%, transparent);
+}
+.active .value,
+.active .label { color: var(--color-accent); }
+.dimmed {
+  opacity: 0.44;
+  filter: saturate(0.72);
+}
+@media (prefers-reduced-motion: reduce) {
+  .column { transition: none; }
+}
+
+.single {
+  grid-template-columns: minmax(10rem, 22rem);
+  justify-content: center;
+}
+.single .track {
+  inline-size: min(100%, 16rem);
+}
+@container explorer (max-width: 30rem) {
+  .single { grid-template-columns: minmax(0, 1fr); }
+  .single .track { inline-size: min(70%, 12rem); }
+}

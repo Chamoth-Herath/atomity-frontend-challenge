@@ -87,6 +87,8 @@
 }
 
 .resource {
+  display: inline-flex;
+  align-items: center;
   inline-size: 100%;
   min-block-size: 38px;
   padding: 0;
@@ -101,17 +103,14 @@
   overflow-wrap: anywhere;
   transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
 
-  & span {
-    margin-inline-start: var(--space-1);
-    color: var(--color-accent);
-    white-space: nowrap;
-  }
 }
 
-.resource:hover,
-.resource:focus-visible {
+.clickableRow {
+  cursor: pointer;
+}
+.clickableRow:hover .resource,
+.clickableRow:focus-visible .resource {
   color: var(--color-accent);
-  transform: translateX(2px);
 }
 
 .pod {
@@ -212,9 +211,6 @@
     font-size: 0.625rem;
   }
 
-  .resource span {
-    display: none;
-  }
 
   .efficiency {
     padding: 0.15rem 0.2rem;
@@ -227,10 +223,6 @@
     transition: none;
   }
 
-  .resource:hover,
-  .resource:focus-visible {
-    transform: none;
-  }
 }
 
 /* Professional table treatment shared by day and night themes. */
@@ -268,4 +260,29 @@
 .efficiency {
   border: 1px solid color-mix(in srgb, var(--color-accent) 16%, transparent);
   background: var(--color-accent-soft);
+}
+
+/* Connected chart ↔ table inspection state. */
+.table tbody tr {
+  outline: none;
+  transition:
+    opacity 180ms var(--ease-out),
+    background var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+.activeRow,
+.table tbody tr.activeRow:hover,
+.table tbody tr.activeRow:focus-within {
+  background: color-mix(in srgb, var(--color-accent-soft) 66%, var(--color-surface));
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+.activeRow th,
+.activeRow td.total { color: var(--color-accent); }
+.dimmedRow { opacity: 0.46; }
+.table tbody tr:focus-visible {
+  outline: 2px solid color-mix(in srgb, var(--color-accent) 58%, transparent);
+  outline-offset: -2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .table tbody tr { transition: none; }
 }

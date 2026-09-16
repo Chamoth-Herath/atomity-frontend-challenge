@@ -6,7 +6,7 @@ import styles from './BarChart.module.css';
 
 const easeOut = [0.22, 1, 0.36, 1];
 
-export default function BarChart({ rows, onExplore }) {
+export default function BarChart({ rows, onExplore, activeId, onActiveChange }) {
   const chartRef = useRef(null);
   const inView = useInView(chartRef, { once: true, amount: 0.3 });
   const reduceMotion = useReducedMotion();
@@ -16,27 +16,35 @@ export default function BarChart({ rows, onExplore }) {
   return (
     <div ref={chartRef} className={styles.chart} role="group" aria-label="Monthly cost comparison. Exact amounts are also in the table below.">
       <div className={styles.grid} aria-hidden="true"><span /><span /><span /><span /></div>
-      <div className={styles.columns}>
+      <div className={`${styles.columns} ${rows.length === 1 ? styles.single : ''}`}>
         {rows.map((row, index) => {
           const canExplore = Boolean(onExplore) && (Boolean(row.children) || row.type === 'pod');
           const Element = canExplore ? motion.button : motion.div;
+          const isActive = activeId === row.id;
+          const isDimmed = Boolean(activeId) && !isActive;
           return (
             <Element
+              layout
               key={row.id}
-              className={styles.column}
+              className={`${styles.column} ${isActive ? styles.active : ''} ${isDimmed ? styles.dimmed : ''}`}
               onClick={canExplore ? () => onExplore(row) : undefined}
+              onMouseEnter={() => onActiveChange?.(row.id)}
+              onMouseLeave={() => onActiveChange?.(null)}
+              onFocus={() => onActiveChange?.(row.id)}
+              onBlur={() => onActiveChange?.(null)}
               aria-label={canExplore ? `Explore ${row.name}, ${money(row.total)} per month` : undefined}
               initial={reduceMotion ? false : { opacity: 0, y: 10 }}
               animate={{ opacity: inView || reduceMotion ? 1 : 0, y: inView || reduceMotion ? 0 : 10 }}
               transition={{ duration: reduceMotion ? 0 : 0.42, delay: reduceMotion ? 0 : index * 0.07, ease: easeOut }}
               whileHover={!reduceMotion ? { y: -3, transition: { duration: 0.16, ease: easeOut } } : undefined}
-              whileTap={canExplore && !reduceMotion ? { scale: 0.985 } : undefined}
+              whileTap={canExplore && !reduceMotion ? { scale: 1.02, transition: { duration: 0.12 } } : undefined}
             >
               <span className={styles.value}>
                 <AnimatedNumber value={row.total} format={(value) => money(value, true)} active={inView} />
               </span>
               <span className={styles.track} aria-hidden="true">
                 <motion.span
+                  layout
                   className={`${styles.bar} ${row.id === highestId ? styles.highest : ''}`}
                   style={{ height: `${row.total / largest * 100}%` }}
                   initial={reduceMotion ? false : { scaleY: 0 }}
@@ -44,7 +52,7 @@ export default function BarChart({ rows, onExplore }) {
                   transition={{ duration: reduceMotion ? 0 : 0.65, delay: reduceMotion ? 0 : 0.08 + index * 0.08, ease: easeOut }}
                 />
               </span>
-              <span className={styles.label}>{row.name}{canExplore && <span aria-hidden="true"> ↗</span>}</span>
+              <span className={styles.label}>{row.name}</span>
             </Element>
           );
         })}

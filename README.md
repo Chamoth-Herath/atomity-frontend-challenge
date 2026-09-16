@@ -6,7 +6,7 @@ A small, interactive cloud cost explorer built with **React, Framer Motion, Java
 
 **Option A, 0:30–0:40.** The reference moves from clusters to namespaces to pods, using a chart and a cost table. This is a useful way to answer one question: where is the money going?
 
-This version keeps that flow and adds a clearer cost trail, a largest-share summary, simple explanations of each layer, and a light/dark toggle. Click a bar or resource name to explore. Use the breadcrumb to go back. Pods are the final level.
+This version keeps that flow and turns it into a connected inspection experience. Hovering or focusing a chart item highlights the matching table row (and vice versa), the cost insight updates from the resource being inspected, and the pod level adds a compact resource-cost composition view. Click a bar or resource name to explore. Use the breadcrumb to go back. Pods are the final level.
 
 ## Run locally
 
@@ -59,7 +59,7 @@ The request times out after 10 seconds and retries once on failure. Loading, off
 
 Motion is deliberately staged instead of starting everything at once. Framer Motion's `useInView` reveals the explorer heading and panel first, then staggers the summary metrics and chart heading. The chart has its own observer, so each column fades in and each bar grows from the bottom with a short stagger. Table rows reveal in sequence when the table enters view, and the three explanatory layer cards use a separate scroll-triggered stagger lower on the page.
 
-Key numeric values count smoothly: total monthly cost, resource count, largest-share percentage, and chart value labels. Moving between cluster, namespace, and pod views uses a tightly damped spring so the transition feels responsive without bounce or overshoot. Hover feedback stays subtle: chart items lift slightly with a soft shadow, table rows highlight as a whole, and guide cards move only a couple of pixels.
+Key numeric values count smoothly: total monthly cost, resource count, largest-share percentage, and chart value labels. Moving between cluster, namespace, and pod views uses a tightly damped spring so the transition feels responsive without bounce or overshoot. Hover feedback stays subtle: chart items lift slightly with a soft shadow, the matching chart/table item stays in focus while unrelated rows soften, and guide cards move only a couple of pixels. At pod level, the cost-mix segments reveal in sequence so the drill-down ends with a useful resource breakdown rather than another decorative animation.
 
 Transforms and opacity do the main work, using an ease-out curve for entrances and a controlled spring for layer changes. `useReducedMotion`, `MotionConfig`, and the CSS `prefers-reduced-motion` media query remove motion when requested. There is no scroll hijacking, looping decoration, or animation added only for decoration; only the loading placeholder pulses while a request is pending.
 
@@ -69,7 +69,7 @@ All component colors reference variables in `tokens.css`. Dark mode overrides th
 
 Container queries adapt the feature at 48 rem and 30 rem. Native CSS nesting keeps related rules together. `:has()` highlights a table row when its button is hovered or focused. `color-mix()` makes the panel shadow. Logical properties and `clamp()` handle spacing and fluid sizing.
 
-The layout is designed for desktop, 768 px tablet, and 375 px mobile. The detailed table scrolls inside its own labelled, keyboard-focusable region on narrow screens. It keeps every cost column available.
+The layout is designed for desktop, 768 px tablet, and 375 px mobile. The detailed table stays inside the same visual width as the chart and does not use a horizontal scrollbar. At tablet and phone widths, type and spacing compress carefully so every cost column remains visible.
 
 The page uses semantic headings, a section, breadcrumb navigation, and a real table. Interactive chart bars and resource names are native buttons. Focus moves to the new layer heading after navigation. Screen readers receive the final total instead of every animation frame. Both themes have visible focus styles and readable text contrast.
 
@@ -86,9 +86,7 @@ The app was written from an empty folder. No UI kit, site template, chart librar
 
 ## Validation and next improvements
 
-The production build and **8 automated tests** pass. Tests cover cost reconciliation, partial groups, zero values, malformed data, failed HTTP responses, shared pending requests, and stale/fresh caching. Text contrast was calculated for both themes; the checked text/background pairs exceed 4.5:1.
-
-Browser layout, keyboard interaction, and the live API response could not be verified in this build environment. `SUBMIT.md` contains the short manual check to run before submitting.
+The cost-calculation test suite and source syntax checks pass in this build environment. The project still includes the cache tests; run `npm ci`, `npm test`, and `npm run build` locally before submission to verify the installed dependencies, browser layout, keyboard interaction, and live API response. `SUBMIT.md` contains the short manual check to run before submitting.
 
 With more time: connect a real cloud-cost API, add browser tests for navigation and reduced motion, then consider TypeScript for the response and resource types.
 

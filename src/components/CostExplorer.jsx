@@ -1,7 +1,7 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { motion, useInView, useReducedMotion } from 'framer-motion';
 import useCosts from '../hooks/useCosts';
-import { sumCosts } from '../data/costs';
+import { costColumns, sumCosts } from '../data/costs';
 import { money, percent } from '../utils/format';
 import AnimatedNumber from './AnimatedNumber';
 import BarChart from './BarChart';
@@ -21,6 +21,7 @@ const easeOut = [0.22, 1, 0.36, 1];
 export default function CostExplorer() {
   const { data, isPending, isError, isFetching, fetchStatus, refetch } = useCosts();
   const [path, setPath] = useState([]);
+  const [activeId, setActiveId] = useState(null);
   const sectionRef = useRef(null);
   const guideRef = useRef(null);
   const titleRef = useRef(null);
@@ -43,9 +44,32 @@ export default function CostExplorer() {
   const rootTotal = sumCosts(clusters).total;
   const biggest = rows.reduce((best, row) => !best || row.total > best.total ? row : best, null);
   const biggestShare = biggest ? percent(biggest.total, total.total) : 0;
+  const activeRow = rows.find((row) => row.id === activeId) ?? null;
+
+  const resourceMix = useMemo(() => {
+    if (!pod) return [];
+    return costColumns.map(({ key, label }) => ({
+      key,
+      label,
+      value: pod[key],
+      share: percent(pod[key], pod.total),
+    }));
+  }, [pod]);
+
+  const largestResource = resourceMix.reduce((best, item) => !best || item.value > best.value ? item : best, null);
+
+  let smartInsight = 'Select or hover a resource to connect the chart with the detailed costs below.';
+  if (pod && largestResource) {
+    smartInsight = `${largestResource.label} is ${largestResource.share}% of this pod’s monthly cost, making it the largest cost driver.`;
+  } else if (activeRow) {
+    smartInsight = `${activeRow.name} represents ${percent(activeRow.total, total.total)}% of this view at ${money(activeRow.total)} per month.`;
+  } else if (biggest) {
+    smartInsight = `${biggest.name} currently has the largest share at ${biggestShare}% of this view.`;
+  }
 
   function navigate(nextPath) {
     focusAfterNavigation.current = true;
+    setActiveId(null);
     setPath(nextPath);
   }
 
@@ -55,6 +79,10 @@ export default function CostExplorer() {
       focusAfterNavigation.current = false;
     }
   }, [path]);
+
+  useEffect(() => {
+    if (activeId && !rows.some((row) => row.id === activeId)) setActiveId(null);
+  }, [activeId, rows]);
 
   let state;
   if (isPending) state = fetchStatus === 'paused' ? 'offline' : 'loading';
@@ -104,6 +132,7 @@ export default function CostExplorer() {
                   <span>{total.total > 0 && biggest ? `${biggest.name} leads this view` : 'No spend in this view'}</span>
                 </motion.div>
               </div>
+
               <motion.div className={styles.chartHeading} {...reveal(0.4, 10)}>
                 <div>
                   <h3 ref={titleRef} tabIndex={-1}>{level.plural}</h3>
@@ -111,17 +140,71 @@ export default function CostExplorer() {
                 </div>
                 <span className={styles.legend}><i aria-hidden="true" /> Monthly cost</span>
               </motion.div>
+
+              <motion.div
+                className={styles.smartInsight}
+                initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: reduceMotion ? 0 : 0.32, ease: easeOut }}
+              >
+                <strong>Cost insight</strong>
+                <p>{smartInsight}</p>
+              </motion.div>
+
+              {pod && resourceMix.length > 0 && (
+                <motion.div
+                  className={styles.compositionCard}
+                  initial={reduceMotion ? false : { opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: reduceMotion ? 0 : 0.4, ease: easeOut }}
+                >
+                  <div className={styles.compositionHeader}>
+                    <div><p className={styles.compositionEyebrow}>POD COST MIX</p><h4>Where {pod.name} spends</h4></div>
+                    <span>{money(pod.total)} / month</span>
+                  </div>
+                  <div className={styles.compositionBar} aria-label={`${pod.name} resource cost composition`}>
+                    {resourceMix.map((item, index) => (
+                      <motion.span
+                        key={item.key}
+                        className={styles.compositionSegment}
+                        style={{ flexGrow: Math.max(item.value, 1) }}
+                        title={`${item.label}: ${money(item.value)} (${item.share}%)`}
+                        initial={reduceMotion ? false : { scaleX: 0 }}
+                        animate={{ scaleX: 1 }}
+                        transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : index * 0.06, ease: easeOut }}
+                      />
+                    ))}
+                  </div>
+                  <div className={styles.compositionLegend}>
+                    {resourceMix.map((item) => (
+                      <div key={item.key}><i aria-hidden="true" /><span>{item.label}</span><strong>{item.share}%</strong></div>
+                    ))}
+                  </div>
+                </motion.div>
+              )}
+
               <motion.div
                 key={current?.id ?? 'all'}
-                initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.997 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 12, scale: 0.995 }}
                 animate={{ opacity: 1, y: 0, scale: 1 }}
-                transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 260, damping: 28, mass: 0.8 }}
+                transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 250, damping: 30, mass: 0.82 }}
               >
-                <BarChart rows={rows} onExplore={pod ? undefined : (row) => navigate([...path, row.id])} />
-                <ResourceTable rows={rows} type={level.name} onExplore={pod ? undefined : (row) => navigate([...path, row.id])} />
+                <BarChart
+                  rows={rows}
+                  onExplore={pod ? undefined : (row) => navigate([...path, row.id])}
+                  activeId={activeId}
+                  onActiveChange={setActiveId}
+                />
+                <ResourceTable
+                  rows={rows}
+                  type={level.name}
+                  onExplore={pod ? undefined : (row) => navigate([...path, row.id])}
+                  activeId={activeId}
+                  onActiveChange={setActiveId}
+                />
               </motion.div>
               <motion.div className={styles.panelNote} {...reveal(0.5, 8)}>
-                <span>{current ? 'Use the breadcrumb above to go back.' : 'Select any chart bar or resource name to look closer.'}</span>
+                <span>{pod ? 'Use the breadcrumb above to go back.' : 'Hover to compare. Click any table row to drill into the next layer.'}</span>
                 <span>{isFetching ? 'Updating…' : 'All amounts in USD'}</span>
               </motion.div>
               <p className="srOnly" role="status" aria-live="polite">Showing {rows.length} {level.plural.toLowerCase()}{current ? ` in ${current.name}` : ''}.</p>

@@ -41,3 +41,8 @@ button, a, h1, h2, h3, p, td, th { overflow-wrap: anywhere; }
     transition: none !important;
   }
 }
+
+/* Theme changes should feel like one controlled surface transition, not a flash. */
+body {
+  transition: background-color 280ms ease, color 280ms ease;
+}
