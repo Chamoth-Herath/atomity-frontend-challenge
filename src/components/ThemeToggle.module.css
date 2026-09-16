@@ -1,0 +1,16 @@
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: 44px;
+  padding: var(--space-2) var(--space-4);
+  color: var(--color-text);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  font-size: 0.875rem;
+  transition: background var(--duration-fast);
+
+  &:hover { background: var(--color-muted-surface); }
+  & > span:first-child { font-size: 1.25rem; line-height: 1; }
+}

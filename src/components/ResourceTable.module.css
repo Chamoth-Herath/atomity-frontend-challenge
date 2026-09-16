@@ -1,0 +1,65 @@
+.scrollArea { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-medium); }
+.table {
+  border-collapse: collapse;
+  inline-size: 100%;
+  min-inline-size: 48rem;
+  text-align: end;
+  font-size: 0.875rem;
+  font-variant-numeric: tabular-nums;
+  & th, & td { padding: var(--space-3); white-space: nowrap; }
+  & thead { background: var(--color-muted-surface); color: var(--color-muted); }
+  & thead th { font-weight: 400; }
+  & th:first-child { text-align: start; padding-inline-start: var(--space-4); }
+  & th:last-child, & td:last-child { padding-inline-end: var(--space-4); }
+  & tbody tr + tr { border-block-start: 1px solid var(--color-border); }
+  & tbody tr:has(button:hover), & tbody tr:has(button:focus-visible) { background: var(--color-accent-soft); }
+  & td { color: var(--color-muted); }
+  & td.total { color: var(--color-text); font-weight: 700; }
+}
+.resource {
+  min-block-size: 44px;
+  padding: 0;
+  border: 0;
+  background: var(--color-transparent);
+  color: var(--color-text);
+  font-weight: 700;
+  text-align: start;
+  & span { margin-inline-start: var(--space-2); color: var(--color-accent); }
+}
+.pod { display: inline-flex; align-items: center; min-block-size: 44px; }
+.efficiency { padding: var(--space-1) var(--space-2); background: var(--color-accent-soft); color: var(--color-accent); border-radius: var(--radius-small); }
+.scrollHint { display: none; margin-block-end: var(--space-3); font-size: 0.875rem; color: var(--color-muted); }
+@container explorer (max-width: 50rem) { .scrollHint { display: block; } }
+
+@container explorer (max-width: 48rem) {
+  .table {
+    min-inline-size: 44rem;
+  }
+}
+
+@container explorer (max-width: 30rem) {
+  .scrollHint {
+    margin-block-end: var(--space-2);
+    font-size: 0.8125rem;
+  }
+
+  .table {
+    min-inline-size: 42rem;
+    font-size: 0.8125rem;
+  }
+
+  .table th,
+  .table td {
+    padding-block: 0.65rem;
+    padding-inline: 0.6rem;
+  }
+
+  .table th:first-child {
+    padding-inline-start: var(--space-3);
+  }
+
+  .table th:last-child,
+  .table td:last-child {
+    padding-inline-end: var(--space-3);
+  }
+}

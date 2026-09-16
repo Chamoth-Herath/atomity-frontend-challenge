@@ -1,0 +1,79 @@
+.chart { position: relative; margin-block: var(--space-6); padding-inline: var(--space-4); }
+.grid {
+  position: absolute;
+  inset: 2.3rem var(--space-4) 3rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  pointer-events: none;
+  & span { inline-size: 100%; border-block-start: 1px dashed var(--color-border); }
+}
+.columns { position: relative; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: clamp(0.5rem, 4cqi, 3rem); }
+.column {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-3);
+  min-inline-size: 0;
+  margin: 0;
+  padding: 0 var(--space-2);
+  background: var(--color-transparent);
+  color: var(--color-text);
+  border: 0;
+  border-radius: var(--radius-small);
+  text-align: center;
+  &:is(button):hover .bar { filter: brightness(0.93); }
+  &:is(button):hover .label { color: var(--color-accent); }
+}
+.value { font-size: clamp(0.875rem, 2cqi, 1.125rem); font-weight: 700; font-variant-numeric: tabular-nums; }
+.track { display: flex; align-items: flex-end; justify-content: center; inline-size: 100%; block-size: clamp(8rem, 22cqi, 12rem); }
+.bar {
+  display: block;
+  inline-size: min(100%, 7rem);
+  background: var(--color-bar);
+  border-radius: var(--radius-medium) var(--radius-medium) var(--space-1) var(--space-1);
+  transform-origin: bottom;
+  transition: filter var(--duration-fast);
+}
+.highest { background: var(--color-bar-strong); }
+.label { font-size: 0.875rem; min-block-size: 2.7em; line-height: 1.35; }
+@container explorer (max-width: 30rem) {
+  .chart { padding-inline: 0; }
+  .column { padding-inline: 0; }
+  .columns { gap: var(--space-3); }
+  .label span { display: none; }
+  .bar { border-start-start-radius: var(--radius-small); border-start-end-radius: var(--radius-small); }
+}
+
+@container explorer (max-width: 48rem) {
+  .columns {
+    gap: clamp(0.75rem, 3cqi, 1.5rem);
+  }
+}
+
+@container explorer (max-width: 30rem) {
+  .chart {
+    margin-block: var(--space-5);
+  }
+
+  .grid {
+    inset-inline: 0;
+  }
+
+  .columns {
+    gap: var(--space-2);
+  }
+
+  .value {
+    font-size: 0.8125rem;
+  }
+
+  .track {
+    block-size: 7.5rem;
+  }
+
+  .label {
+    font-size: 0.75rem;
+    line-height: 1.25;
+  }
+}
