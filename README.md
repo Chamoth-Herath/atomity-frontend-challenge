@@ -17,7 +17,7 @@ npm install
 npm run dev
 ```
 
-After the first successful install, commit the generated `package-lock.json` so reviewers and deployment use the exact same dependency tree.
+After the first successful install, keep and commit the generated `package-lock.json` so reviewers and deployment use the same dependency tree.
 
 Open the local address printed in the terminal. Internet access is needed to load the example data.
 
@@ -34,7 +34,7 @@ npm run preview # Open the production build locally
 | `src/App.jsx` | Page header, introduction, feature, and footer |
 | `src/components/CostExplorer.jsx` | Current location and the three-level explorer |
 | `src/components/BarChart.jsx` | Chart bars and their scroll animations |
-| `src/components/ResourceTable.jsx` | Exact costs and keyboard-accessible drill-down buttons |
+| `src/components/ResourceTable.jsx` | Exact costs and keyboard-accessible full-row drill-down |
 | `src/components/Breadcrumbs.jsx` | Navigation back to a parent level |
 | `src/components/AnimatedNumber.jsx` | Smoothly counts the total |
 | `src/components/StatusView.jsx` | Loading, offline, empty, and error messages |
@@ -86,11 +86,11 @@ The app was written from an empty folder. No UI kit, site template, chart librar
 
 ## Validation and next improvements
 
-The cost-calculation test suite and source syntax checks pass in this build environment. The project still includes the cache tests; run `npm install`, `npm test`, and `npm run build` locally before submission to verify the installed dependencies, browser layout, keyboard interaction, and live API response. `SUBMIT.md` contains the short manual check to run before submitting.
+The cost-calculation test suite and source syntax checks pass in this build environment. The project also includes cache tests. Before submission, run `npm install` once to generate `package-lock.json`, then run `npm run verify` locally to execute the tests and production build. Also verify the browser layout, keyboard interaction, and live API response. `SUBMIT.md` contains the final manual submission checklist.
 
 With more time: connect a real cloud-cost API, add browser tests for navigation and reduced motion, then consider TypeScript for the response and resource types.
 
-AI assistance was used during implementation. The commit history records the actual development stages.
+AI assistance was used during implementation. The final repository should contain the actual development history for this current Tailwind version, and the implementation should be understood well enough to explain during review.
 
 See [SUBMIT.md](./SUBMIT.md) for GitHub and deployment steps.
 

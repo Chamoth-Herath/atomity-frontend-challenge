@@ -1,6 +1,7 @@
-Live demo
+Final live demo URL
 
-https://atomity-option-a-simple-3af7c5.chamothherath100.chatgpt.site
+Deploy this exact Tailwind version from the final GitHub repository, then paste the public URL here before submission.
 
-Open SUBMIT.md for the run and submission steps.
-The GitHub repository must still be created in your account.
+Do not submit an older demo URL from an earlier CSS Modules build.
+
+See SUBMIT.md for the final deployment and verification checklist.
