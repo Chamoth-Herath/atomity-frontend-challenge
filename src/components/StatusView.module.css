@@ -27,3 +27,16 @@
     block-size: 9rem;
   }
 }
+
+.skeletonTitle,
+.skeletonBars span {
+  background: linear-gradient(90deg, var(--color-muted-surface), var(--color-surface-hover), var(--color-muted-surface));
+  background-size: 200% 100%;
+}
+.message button {
+  border: 1px solid var(--color-accent);
+  border-radius: var(--radius-pill);
+  background: var(--color-accent);
+  color: var(--color-on-ink);
+  box-shadow: var(--shadow-soft);
+}

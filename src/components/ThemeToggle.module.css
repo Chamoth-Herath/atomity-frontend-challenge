@@ -14,3 +14,22 @@
   &:hover { background: var(--color-muted-surface); }
   & > span:first-child { font-size: 1.25rem; line-height: 1; }
 }
+
+/* Refined theme control: quiet by default, clear on interaction. */
+.toggle {
+  border-color: var(--color-border);
+  background: color-mix(in srgb, var(--color-surface) 92%, transparent);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-ink) 5%, transparent);
+  transition:
+    background var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    transform var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out);
+}
+.toggle:hover {
+  background: var(--color-surface-hover);
+  border-color: var(--color-border-strong);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-soft);
+}
+.toggle:active { transform: translateY(0); }

@@ -1,21 +1,25 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 body {
-  transition: background-color 220ms ease, color 220ms ease;
+  min-block-size: 100vh;
   margin: 0;
-  background: var(--color-bg);
+  background:
+    radial-gradient(circle at 50% -10%, var(--page-glow), transparent 34rem),
+    var(--color-bg);
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: 1rem;
   line-height: 1.5;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  transition: background-color var(--duration-medium) ease, color var(--duration-medium) ease;
 }
 button, a { -webkit-tap-highlight-color: var(--color-transparent); }
 button { font: inherit; cursor: pointer; }
 button:disabled { cursor: wait; }
 a { color: inherit; }
 button, a { touch-action: manipulation; }
-:focus-visible { outline: 3px solid var(--color-accent); outline-offset: 4px; }
+:focus-visible { outline: 3px solid color-mix(in srgb, var(--color-accent) 72%, white); outline-offset: 4px; }
 h1, h2, h3, p { margin: 0; }
 button, a, h1, h2, h3, p, td, th { overflow-wrap: anywhere; }
 ::selection { color: var(--color-text); background: var(--color-accent-soft); }
@@ -37,4 +41,3 @@ button, a, h1, h2, h3, p, td, th { overflow-wrap: anywhere; }
     transition: none !important;
   }
 }
-

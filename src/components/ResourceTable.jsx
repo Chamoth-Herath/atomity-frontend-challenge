@@ -13,8 +13,7 @@ export default function ResourceTable({ rows, onExplore, type }) {
 
   return (
     <div ref={tableRef}>
-      <p className={styles.scrollHint}>Scroll sideways to see every cost.</p>
-      <div className={styles.scrollArea} role="region" aria-label="Detailed resource costs, scroll horizontally if needed" tabIndex={0}>
+      <div className={styles.scrollArea} role="region" aria-label="Detailed resource costs">
         <table className={styles.table}>
           <caption className="srOnly">Monthly resource costs in US dollars, grouped by {type.toLowerCase()}. Efficiency is shown as a percentage.</caption>
           <thead><tr>

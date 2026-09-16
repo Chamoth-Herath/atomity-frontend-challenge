@@ -31,3 +31,14 @@
     padding-inline: 0;
   }
 }
+
+/* Professional breadcrumb treatment. */
+.breadcrumbs button {
+  transition: color var(--duration-fast) var(--ease-out), background var(--duration-fast) var(--ease-out);
+}
+.breadcrumbs button:hover {
+  color: var(--color-text);
+  background: var(--color-surface-hover);
+}
+.separator { color: color-mix(in srgb, var(--color-muted) 70%, transparent); }
+.current { color: var(--color-accent); }

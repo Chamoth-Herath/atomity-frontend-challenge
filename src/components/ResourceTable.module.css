@@ -1,85 +1,223 @@
-.scrollArea { overflow-x: auto; border: 1px solid var(--color-border); border-radius: var(--radius-medium); }
+.scrollArea {
+  margin-inline: var(--space-4);
+  overflow: hidden;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+}
+
 .table {
   border-collapse: collapse;
+  table-layout: fixed;
   inline-size: 100%;
-  min-inline-size: 48rem;
+  min-inline-size: 0;
   text-align: end;
-  font-size: 0.875rem;
+  font-size: 0.8125rem;
   font-variant-numeric: tabular-nums;
-  & th, & td { padding: var(--space-3); white-space: nowrap; }
-  & thead { background: var(--color-muted-surface); color: var(--color-muted); }
-  & thead th { font-weight: 400; }
-  & th:first-child { text-align: start; padding-inline-start: var(--space-4); }
-  & th:last-child, & td:last-child { padding-inline-end: var(--space-4); }
-  & tbody tr + tr { border-block-start: 1px solid var(--color-border); }
+
+  & th,
+  & td {
+    padding: 0.7rem 0.45rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  & thead {
+    background: var(--color-muted-surface);
+    color: var(--color-muted);
+  }
+
+  & thead th {
+    font-weight: 500;
+    font-size: 0.75rem;
+  }
+
+  & th:first-child {
+    inline-size: 22%;
+    text-align: start;
+    padding-inline-start: var(--space-3);
+  }
+
+  & th:last-child,
+  & td:last-child {
+    padding-inline-end: var(--space-3);
+  }
+
+  & tbody tr + tr {
+    border-block-start: 1px solid var(--color-border);
+  }
+
   & tbody tr {
     transition: background var(--duration-fast) var(--ease-out), box-shadow var(--duration-fast) var(--ease-out);
   }
+
   & tbody tr:hover,
   & tbody tr:focus-within {
     background: color-mix(in srgb, var(--color-accent-soft) 72%, transparent);
     box-shadow: inset 3px 0 0 color-mix(in srgb, var(--color-accent) 72%, transparent);
   }
+
   & tbody tr:hover th,
   & tbody tr:focus-within th,
   & tbody tr:hover td.total,
   & tbody tr:focus-within td.total {
     color: var(--color-accent);
   }
-  & td { color: var(--color-muted); }
-  & td.total { color: var(--color-text); font-weight: 700; }
+
+  & td {
+    color: var(--color-muted);
+  }
+
+  & td.total {
+    color: var(--color-text);
+    font-weight: 700;
+  }
 }
+
+.resourceColumn {
+  inline-size: 22%;
+}
+
+.efficiencyColumn {
+  inline-size: 12%;
+}
+
+.totalColumn {
+  inline-size: 12%;
+}
+
 .resource {
-  min-block-size: 44px;
+  inline-size: 100%;
+  min-block-size: 38px;
   padding: 0;
   border: 0;
   background: var(--color-transparent);
   color: var(--color-text);
   font-weight: 700;
+  font-size: inherit;
+  line-height: 1.25;
   text-align: start;
+  white-space: normal;
+  overflow-wrap: anywhere;
   transition: color var(--duration-fast) var(--ease-out), transform var(--duration-fast) var(--ease-out);
-  & span { margin-inline-start: var(--space-2); color: var(--color-accent); }
+
+  & span {
+    margin-inline-start: var(--space-1);
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
 }
+
 .resource:hover,
 .resource:focus-visible {
   color: var(--color-accent);
   transform: translateX(2px);
 }
-.pod { display: inline-flex; align-items: center; min-block-size: 44px; }
-.efficiency { padding: var(--space-1) var(--space-2); background: var(--color-accent-soft); color: var(--color-accent); border-radius: var(--radius-small); }
-.scrollHint { display: none; margin-block-end: var(--space-3); font-size: 0.875rem; color: var(--color-muted); }
-@container explorer (max-width: 50rem) { .scrollHint { display: block; } }
 
-@container explorer (max-width: 48rem) {
-  .table {
-    min-inline-size: 44rem;
-  }
+.pod {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: 38px;
+  color: var(--color-text);
+  font-weight: 600;
+  line-height: 1.25;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 
-@container explorer (max-width: 30rem) {
-  .scrollHint {
-    margin-block-end: var(--space-2);
-    font-size: 0.8125rem;
+.efficiency {
+  display: inline-block;
+  max-inline-size: 100%;
+  padding: 0.2rem 0.35rem;
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  border-radius: var(--radius-small);
+}
+
+@container explorer (max-width: 48rem) {
+  .scrollArea {
+    margin-inline: var(--space-2);
   }
 
   .table {
-    min-inline-size: 42rem;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
   }
 
   .table th,
   .table td {
-    padding-block: 0.65rem;
-    padding-inline: 0.6rem;
+    padding: 0.6rem 0.3rem;
+  }
+
+  .table thead th {
+    font-size: 0.6875rem;
+  }
+
+  .resourceColumn {
+    inline-size: 21%;
+  }
+
+  .efficiencyColumn,
+  .totalColumn {
+    inline-size: 12.5%;
+  }
+}
+
+@container explorer (max-width: 30rem) {
+  .scrollArea {
+    margin-inline: 0;
+    border-radius: var(--radius-small);
+  }
+
+  .table {
+    font-size: 0.625rem;
+  }
+
+  .table th,
+  .table td {
+    padding-block: 0.5rem;
+    padding-inline: 0.15rem;
+    letter-spacing: -0.015em;
+  }
+
+  .table thead th {
+    font-size: 0.58rem;
+    letter-spacing: -0.02em;
   }
 
   .table th:first-child {
-    padding-inline-start: var(--space-3);
+    inline-size: 20%;
+    padding-inline-start: 0.35rem;
   }
 
   .table th:last-child,
   .table td:last-child {
-    padding-inline-end: var(--space-3);
+    padding-inline-end: 0.35rem;
+  }
+
+  .resourceColumn {
+    inline-size: 20%;
+  }
+
+  .efficiencyColumn {
+    inline-size: 13%;
+  }
+
+  .totalColumn {
+    inline-size: 12%;
+  }
+
+  .resource,
+  .pod {
+    min-block-size: 34px;
+    font-size: 0.625rem;
+  }
+
+  .resource span {
+    display: none;
+  }
+
+  .efficiency {
+    padding: 0.15rem 0.2rem;
   }
 }
 
@@ -93,4 +231,41 @@
   .resource:focus-visible {
     transform: none;
   }
+}
+
+/* Professional table treatment shared by day and night themes. */
+.scrollArea {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+  box-shadow: 0 1px 2px color-mix(in srgb, var(--color-ink) 4%, transparent);
+}
+
+.table thead {
+  background: color-mix(in srgb, var(--color-muted-surface) 92%, var(--color-surface));
+}
+.table thead th {
+  color: var(--color-muted);
+  font-weight: 700;
+  letter-spacing: 0.01em;
+}
+.table tbody tr {
+  background: var(--color-surface);
+}
+.table tbody tr:hover,
+.table tbody tr:focus-within {
+  background: color-mix(in srgb, var(--color-accent-soft) 52%, var(--color-surface));
+  box-shadow: inset 3px 0 0 var(--color-accent);
+}
+.table tbody tr + tr {
+  border-block-start-color: color-mix(in srgb, var(--color-border) 88%, transparent);
+}
+.resource,
+.pod,
+.table td.total {
+  color: var(--color-text);
+}
+.table td { color: var(--color-muted); }
+.efficiency {
+  border: 1px solid color-mix(in srgb, var(--color-accent) 16%, transparent);
+  background: var(--color-accent-soft);
 }
