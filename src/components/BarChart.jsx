@@ -56,7 +56,7 @@ export default function BarChart({ rows, onExplore, activeId, onActiveChange }) 
               animate={{ opacity: inView || reduceMotion ? 1 : 0, y: inView || reduceMotion ? 0 : 10 }}
               transition={{ duration: reduceMotion ? 0 : 0.42, delay: reduceMotion ? 0 : index * 0.07, ease: easeOut }}
               whileHover={!reduceMotion ? { y: -3, transition: { duration: 0.16, ease: easeOut } } : undefined}
-              whileTap={canExplore && !reduceMotion ? { scale: 1.02, transition: { duration: 0.12 } } : undefined}
+              whileTap={canExplore && !reduceMotion ? { scale: 0.985, transition: { type: 'spring', stiffness: 520, damping: 34 } } : undefined}
             >
               <span className={`text-[clamp(0.875rem,2vw,1.125rem)] font-bold tabular-nums transition-colors group-hover:text-[var(--color-accent)] group-focus-visible:text-[var(--color-accent)] max-[480px]:text-[0.8125rem] ${isActive ? 'text-[var(--color-accent)]' : ''}`}>
                 <AnimatedNumber value={row.total} format={(value) => money(value, true)} active={inView} />

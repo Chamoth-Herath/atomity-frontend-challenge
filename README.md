@@ -91,3 +91,14 @@ With more time: connect a real cloud-cost API, add browser tests for navigation 
 AI assistance was used during implementation. The commit history records the actual development stages.
 
 See [SUBMIT.md](./SUBMIT.md) for GitHub and deployment steps.
+
+## Animation quality
+
+Motion is intentionally restrained and task-focused:
+
+- Scroll-triggered sections reveal with short staggered entrances instead of everything appearing at once.
+- Hover feedback uses small lifts, shadow/color changes, and spring-based button interactions.
+- Cost totals and percentages count smoothly between data states.
+- Drill-down transitions use damped spring physics and ease-out curves with no excessive bounce.
+- `prefers-reduced-motion` is respected across the experience.
+
