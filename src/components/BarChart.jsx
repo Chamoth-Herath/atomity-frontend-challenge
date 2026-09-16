@@ -65,7 +65,7 @@ export default function BarChart({ rows, onExplore, activeId, onActiveChange }) 
               <span className={`flex h-[clamp(8rem,22vw,12rem)] w-full items-end justify-center max-[480px]:h-[7.5rem] ${single ? 'max-w-64 justify-self-center max-[480px]:w-[70%] max-[480px]:max-w-48' : ''}`} aria-hidden="true">
                 <motion.span
                   layout
-                  className={`block w-[min(100%,7rem)] origin-bottom rounded-t-[0.875rem] rounded-b-[0.25rem] shadow-[inset_0_1px_0_rgba(255,255,255,0.18)] transition-[filter,box-shadow] duration-150 group-hover:brightness-[0.97] group-hover:saturate-110 group-focus-visible:brightness-[0.97] ${row.id === highestId ? 'bg-[var(--color-bar-strong)] shadow-[inset_0_1px_0_rgba(255,255,255,0.22),0_7px_18px_rgba(22,122,82,0.12)]' : 'bg-[var(--color-bar)]'} ${isActive ? 'brightness-[1.03] saturate-110 shadow-[0_10px_24px_rgba(22,122,82,0.18)]' : ''} max-[480px]:rounded-t-lg`}
+                  className={`block w-[min(100%,7rem)] origin-bottom rounded-t-[0.875rem] rounded-b-[0.25rem] shadow-[var(--shadow-bar-inset)] transition-[filter,box-shadow] duration-150 group-hover:brightness-[0.97] group-hover:saturate-110 group-focus-visible:brightness-[0.97] ${row.id === highestId ? 'bg-[var(--color-bar-strong)] shadow-[var(--shadow-bar-strong)]' : 'bg-[var(--color-bar)]'} ${isActive ? 'brightness-[1.03] saturate-110 shadow-[var(--shadow-bar-active)]' : ''} max-[480px]:rounded-t-lg`}
                   style={{ height: `${row.total / largest * 100}%` }}
                   initial={reduceMotion ? false : { scaleY: 0 }}
                   animate={{ scaleY: inView || reduceMotion ? 1 : 0 }}

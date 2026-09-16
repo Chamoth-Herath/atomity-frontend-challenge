@@ -15,7 +15,7 @@ export default function ResourceTable({ rows, onExplore, type, activeId, onActiv
 
   return (
     <div ref={tableRef}>
-      <div className="mx-4 overflow-hidden rounded-[0.875rem] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[0_1px_2px_rgba(0,0,0,0.04)] max-[768px]:mx-2 max-[480px]:mx-0 max-[480px]:rounded-lg" role="region" aria-label="Detailed resource costs">
+      <div className="mx-4 overflow-hidden rounded-[0.875rem] border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-hairline)] max-[768px]:mx-2 max-[480px]:mx-0 max-[480px]:rounded-lg" role="region" aria-label="Detailed resource costs">
         <table className="w-full table-fixed border-collapse text-right text-[0.8125rem] tabular-nums max-[768px]:text-xs max-[480px]:text-[0.625rem]">
           <thead className="bg-[var(--color-muted-surface)]">
             <tr>

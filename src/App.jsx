@@ -66,7 +66,7 @@ export default function App() {
           </motion.p>
           <motion.a
             variants={heroItem}
-            className="mt-6 inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-3 text-sm font-bold text-[var(--color-on-ink)] no-underline shadow-[0_10px_26px_rgba(22,122,82,0.18)] transition-[box-shadow,background-color,border-color] duration-150 ease-out hover:border-[var(--color-accent-hover)] hover:bg-[var(--color-accent-hover)] hover:shadow-[0_14px_32px_rgba(22,122,82,0.24)] max-[480px]:mt-4"
+            className="mt-6 inline-flex min-h-[46px] items-center justify-center rounded-full border border-[var(--color-accent)] bg-[var(--color-accent)] px-5 py-3 text-sm font-bold text-[var(--color-on-ink)] no-underline shadow-[var(--shadow-button)] transition-[box-shadow,background-color,border-color] duration-150 ease-out hover:border-[var(--color-accent-hover)] hover:bg-[var(--color-accent-hover)] hover:shadow-[var(--shadow-button-hover)] max-[480px]:mt-4"
             href="#explorer"
             whileHover={reduceMotion ? undefined : { y: -2, scale: 1.012, transition: { type: 'spring', stiffness: 360, damping: 26, mass: 0.55 } }}
             whileTap={reduceMotion ? undefined : { y: 0, scale: 0.985, transition: { type: 'spring', stiffness: 520, damping: 34 } }}
