@@ -7,7 +7,7 @@ export default function ThemeToggle() {
     const next = dark ? 'light' : 'dark';
     document.documentElement.dataset.theme = next;
     setDark(!dark);
-    try { localStorage.setItem('atomity-theme', next); } catch { /* Storage is optional. */ }
+    try { localStorage.setItem('atomity-theme', next); } catch {}
   }
 
   return (

@@ -22,7 +22,7 @@ export function buildCostTree(products) {
     throw new Error('The data service returned an unexpected response.');
   }
 
-  // Prices become example monthly costs. Store cents so totals stay exact.
+  // Keep costs in cents so totals stay exact.
   const pods = products.map((product) => {
     const total = Math.round(product.price * 100);
     const cpu = Math.floor(total * 0.45);
@@ -73,7 +73,7 @@ export function efficiency(row) {
 }
 
 export async function fetchCosts() {
-  // Do not cancel on a brief unmount: StrictMode can share this pending request.
+  // Reuse the pending request during quick remounts.
   const response = await fetch(API_URL, { signal: AbortSignal.timeout(10000) });
   if (!response.ok) throw new Error('We could not load the example costs. Please try again.');
   const data = await response.json();
