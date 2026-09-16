@@ -172,47 +172,6 @@ export default function CostExplorer() {
                 <p className="text-sm leading-[1.55] text-[var(--color-muted)]">{smartInsight}</p>
               </motion.div>
 
-              {pod && resourceMix.length > 0 && (
-                <motion.div
-                  className="mx-4 mt-4 rounded-[0.875rem] border border-[var(--color-border)] bg-[var(--surface-chart)] p-4 transition-colors duration-300 max-[480px]:mx-0"
-                  initial={reduceMotion ? false : { opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: reduceMotion ? 0 : 0.4, ease: easeOut }}
-                >
-                  <div className="mb-4 flex items-start justify-between gap-4 max-[480px]:flex-col max-[480px]:gap-2">
-                    <div>
-                      <p className="text-[0.6875rem] font-bold tracking-[0.12em] text-[var(--color-accent)]">POD COST MIX</p>
-                      <h4 className="mt-1 text-base font-bold tracking-[-0.02em] text-[var(--color-text)]">Where {pod.name} spends</h4>
-                    </div>
-                    <span className="whitespace-nowrap text-[0.8125rem] tabular-nums text-[var(--color-muted)]">{money(pod.total)} / month</span>
-                  </div>
-
-                  <div className="flex h-[0.8rem] overflow-hidden rounded-full bg-[var(--color-muted-surface)]" aria-label={`${pod.name} resource cost composition`}>
-                    {resourceMix.map((item, index) => (
-                      <motion.span
-                        key={item.key}
-                        className="block min-w-1 origin-left border-r border-[var(--color-surface)] bg-[var(--color-accent)] last:border-r-0"
-                        style={{ flexGrow: Math.max(item.value, 1) }}
-                        title={`${item.label}: ${money(item.value)} (${item.share}%)`}
-                        initial={reduceMotion ? false : { scaleX: 0 }}
-                        animate={{ scaleX: 1 }}
-                        transition={{ duration: reduceMotion ? 0 : 0.5, delay: reduceMotion ? 0 : index * 0.06, ease: easeOut }}
-                      />
-                    ))}
-                  </div>
-
-                  <div className="mt-3 grid grid-cols-5 gap-2 max-[768px]:grid-cols-3 max-[480px]:grid-cols-2 max-[480px]:gap-x-3 max-[480px]:gap-y-2">
-                    {resourceMix.map((item) => (
-                      <div key={item.key} className="grid min-w-0 grid-cols-[auto_1fr_auto] items-center gap-[0.35rem] text-xs text-[var(--color-muted)]">
-                        <i className="h-[0.45rem] w-[0.45rem] rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
-                        <span className="overflow-hidden text-ellipsis whitespace-nowrap">{item.label}</span>
-                        <strong className="tabular-nums text-[var(--color-text)]">{item.share}%</strong>
-                      </div>
-                    ))}
-                  </div>
-                </motion.div>
-              )}
-
               <motion.div
                 key={current?.id ?? 'all'}
                 initial={reduceMotion ? false : { opacity: 0, y: 12, scale: 0.995 }}
