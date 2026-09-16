@@ -8,7 +8,6 @@ import BarChart from './BarChart';
 import Breadcrumbs from './Breadcrumbs';
 import ResourceTable from './ResourceTable';
 import StatusView from './StatusView';
-import styles from './CostExplorer.module.css';
 
 const levels = [
   { name: 'Cluster', plural: 'Clusters', hint: 'A group of computers', action: 'Choose a cluster to see its workspaces.' },
@@ -96,77 +95,103 @@ export default function CostExplorer() {
   });
 
   return (
-    <section id="explorer" ref={sectionRef} className={styles.section} aria-labelledby="explorer-title">
-      <motion.div className={styles.sectionHeading} {...reveal(0)}>
-        <div><p className={styles.eyebrow}>FOLLOW THE COST</p><h2 id="explorer-title">One bill. Every layer.</h2></div>
+    <section id="explorer" ref={sectionRef} className="scroll-mt-6" aria-labelledby="explorer-title">
+      <motion.div className="mb-6 flex flex-wrap items-end justify-between gap-4 max-[480px]:mb-4 max-[480px]:items-start max-[480px]:gap-3" {...reveal(0)}>
+        <div>
+          <p className="text-xs font-bold tracking-[0.14em] text-[var(--color-accent)]">FOLLOW THE COST</p>
+          <h2 id="explorer-title" className="mt-2 text-[clamp(1.5rem,3vw,2rem)] leading-[1.2] tracking-[-0.035em] text-[var(--color-text)]">One bill. Every layer.</h2>
+        </div>
       </motion.div>
+
       <motion.div
-        className={styles.panel}
+        className="overflow-hidden rounded-3xl border border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-panel)] transition-[background-color,border-color,box-shadow] duration-300 max-[480px]:rounded-[0.875rem]"
         initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.995 }}
         animate={{ opacity: inView || reduceMotion ? 1 : 0, y: inView || reduceMotion ? 0 : 20, scale: 1 }}
         transition={{ duration: reduceMotion ? 0 : 0.55, delay: reduceMotion ? 0 : 0.08, ease: easeOut }}
         aria-busy={isPending && fetchStatus !== 'paused'}
       >
-        <motion.div className={styles.panelHeader} {...reveal(0.14, 8)}>
+        <motion.div className="flex items-center justify-between gap-4 border-b border-[var(--color-border)] bg-[var(--surface-header)] px-[clamp(1rem,3vw,2rem)] py-3 transition-colors duration-300 max-[480px]:items-start max-[480px]:gap-2 max-[480px]:px-3 max-[480px]:py-2" {...reveal(0.14, 8)}>
           <Breadcrumbs trail={trail} onBack={(index) => navigate(path.slice(0, index))} />
-          <span className={styles.step}>LAYER 0{Math.min(trail.length + 1, 3)} / 03</span>
+          <span className="shrink-0 text-xs font-bold tracking-[0.08em] text-[var(--color-muted)] max-[480px]:hidden">LAYER 0{Math.min(trail.length + 1, 3)} / 03</span>
         </motion.div>
-        <div className={styles.panelBody}>
+
+        <div className="min-w-0 p-[clamp(1rem,3vw,2rem)] max-[768px]:p-[clamp(1rem,3.5vw,1.5rem)] max-[480px]:px-3 max-[480px]:py-4">
           {state ? <StatusView state={state} onRetry={() => refetch()} retrying={isFetching} /> : (
             <>
-              {isError && <p className={styles.refreshError} role="status">The update failed. Your last loaded costs are still shown. <button onClick={() => refetch()} disabled={isFetching}>Try again</button></p>}
-              <div className={styles.summary}>
-                <motion.div className={styles.primaryMetric} {...reveal(0.2, 10)}>
-                  <p>{current ? `${current.name} cost` : 'Total monthly cost'}</p>
-                  <strong><AnimatedNumber value={total.total} format={money} active={inView} /></strong>
-                  <span>{current ? `${percent(total.total, rootTotal)}% of the full bill` : `${total.podCount} pods across ${clusters.length} clusters`}</span>
+              {isError && (
+                <p className="mb-4 rounded-lg bg-[var(--color-error-soft)] p-3 text-sm text-[var(--color-error)]" role="status">
+                  The update failed. Your last loaded costs are still shown.{' '}
+                  <button className="ml-2 min-h-11 border-0 bg-transparent text-inherit underline" onClick={() => refetch()} disabled={isFetching}>Try again</button>
+                </p>
+              )}
+
+              <div className="grid min-w-0 grid-cols-[1.3fr_1fr_0.8fr] items-stretch gap-6 border-b border-[var(--color-border)] pb-8 max-[768px]:grid-cols-2 max-[768px]:gap-4 max-[480px]:grid-cols-1 max-[480px]:gap-4 max-[480px]:pb-6">
+                <motion.div className="flex min-w-0 flex-col justify-center gap-2 max-[768px]:col-span-2 max-[480px]:col-auto" {...reveal(0.2, 10)}>
+                  <p className="text-sm text-[var(--color-muted)]">{current ? `${current.name} cost` : 'Total monthly cost'}</p>
+                  <strong className="text-[clamp(2rem,4vw,2.8rem)] font-medium leading-[1.2] tracking-[-0.04em] text-[var(--color-text)] tabular-nums max-[480px]:text-[clamp(2rem,12vw,2.55rem)]">
+                    <AnimatedNumber value={total.total} format={money} active={inView} />
+                  </strong>
+                  <span className="text-sm text-[var(--color-muted)]">{current ? `${percent(total.total, rootTotal)}% of the full bill` : `${total.podCount} pods across ${clusters.length} clusters`}</span>
                 </motion.div>
-                <motion.div className={styles.metric} {...reveal(0.27, 10)}>
-                  <p>Resources in this view</p>
-                  <strong><AnimatedNumber value={rows.length} format={(value) => Math.round(value)} active={inView} /> <span>{level.plural.toLowerCase()}</span></strong>
-                  <span>{level.hint}</span>
+
+                <motion.div className="flex min-w-0 flex-col justify-center gap-2 border-l border-[var(--color-border)] pl-6 max-[768px]:border-l-0 max-[768px]:pl-0 max-[480px]:border-t max-[480px]:pt-4" {...reveal(0.27, 10)}>
+                  <p className="text-sm text-[var(--color-muted)]">Resources in this view</p>
+                  <strong className="text-3xl font-medium leading-[1.2] tracking-[-0.04em] text-[var(--color-text)] tabular-nums max-[480px]:text-[1.75rem]">
+                    <AnimatedNumber value={rows.length} format={(value) => Math.round(value)} active={inView} /> <span className="text-base tracking-normal">{level.plural.toLowerCase()}</span>
+                  </strong>
+                  <span className="text-sm text-[var(--color-muted)]">{level.hint}</span>
                 </motion.div>
-                <motion.div className={styles.insight} {...reveal(0.34, 10)}>
-                  <p>Largest share</p>
-                  <strong><AnimatedNumber value={biggestShare} format={(value) => Math.round(value)} active={inView} /><span>%</span></strong>
-                  <span>{total.total > 0 && biggest ? `${biggest.name} leads this view` : 'No spend in this view'}</span>
+
+                <motion.div className="flex min-w-0 flex-col justify-center gap-2 rounded-[0.875rem] border border-[var(--color-border)] bg-[var(--surface-accent)] px-6 py-4 transition-colors duration-300 max-[480px]:p-3" {...reveal(0.34, 10)}>
+                  <p className="text-sm text-[var(--color-accent)]">Largest share</p>
+                  <strong className="text-3xl font-medium leading-[1.2] tracking-[-0.04em] text-[var(--color-accent)] tabular-nums max-[480px]:text-[1.75rem]">
+                    <AnimatedNumber value={biggestShare} format={(value) => Math.round(value)} active={inView} /><span className="text-xl">%</span>
+                  </strong>
+                  <span className="text-sm text-[var(--color-accent)]">{total.total > 0 && biggest ? `${biggest.name} leads this view` : 'No spend in this view'}</span>
                 </motion.div>
               </div>
 
-              <motion.div className={styles.chartHeading} {...reveal(0.4, 10)}>
+              <motion.div className="mt-8 flex min-w-0 items-start justify-between gap-4 max-[480px]:mt-6 max-[480px]:flex-col max-[480px]:gap-3" {...reveal(0.4, 10)}>
                 <div>
-                  <h3 ref={titleRef} tabIndex={-1}>{level.plural}</h3>
-                  <p>{level.action}</p>
+                  <h3 ref={titleRef} tabIndex={-1} className="text-lg font-bold text-[var(--color-text)]">{level.plural}</h3>
+                  <p className="mt-1 text-sm text-[var(--color-muted)]">{level.action}</p>
                 </div>
-                <span className={styles.legend}><i aria-hidden="true" /> Monthly cost</span>
+                <span className="inline-flex items-center gap-2 whitespace-nowrap text-sm text-[var(--color-muted)] max-[480px]:whitespace-normal">
+                  <i className="h-2.5 w-2.5 rounded-sm bg-[var(--color-bar-strong)] shadow-[0_0_0_3px_var(--color-accent-soft)]" aria-hidden="true" />
+                  Monthly cost
+                </span>
               </motion.div>
 
               <motion.div
-                className={styles.smartInsight}
+                className="mx-4 mt-4 grid grid-cols-[auto_minmax(0,1fr)] items-baseline gap-3 border-l-2 border-[var(--color-accent)] py-[0.2rem] pl-3 max-[480px]:mx-0 max-[480px]:grid-cols-1 max-[480px]:gap-[0.2rem] max-[480px]:py-[0.15rem]"
                 initial={reduceMotion ? false : { opacity: 0, y: 8 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: reduceMotion ? 0 : 0.32, ease: easeOut }}
               >
-                <strong>Cost insight</strong>
-                <p>{smartInsight}</p>
+                <strong className="whitespace-nowrap text-[0.72rem] font-bold uppercase tracking-[0.07em] text-[var(--color-accent)]">Cost insight</strong>
+                <p className="text-sm leading-[1.55] text-[var(--color-muted)]">{smartInsight}</p>
               </motion.div>
 
               {pod && resourceMix.length > 0 && (
                 <motion.div
-                  className={styles.compositionCard}
+                  className="mx-4 mt-4 rounded-[0.875rem] border border-[var(--color-border)] bg-[var(--surface-chart)] p-4 transition-colors duration-300 max-[480px]:mx-0"
                   initial={reduceMotion ? false : { opacity: 0, y: 10 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: reduceMotion ? 0 : 0.4, ease: easeOut }}
                 >
-                  <div className={styles.compositionHeader}>
-                    <div><p className={styles.compositionEyebrow}>POD COST MIX</p><h4>Where {pod.name} spends</h4></div>
-                    <span>{money(pod.total)} / month</span>
+                  <div className="mb-4 flex items-start justify-between gap-4 max-[480px]:flex-col max-[480px]:gap-2">
+                    <div>
+                      <p className="text-[0.6875rem] font-bold tracking-[0.12em] text-[var(--color-accent)]">POD COST MIX</p>
+                      <h4 className="mt-1 text-base font-bold tracking-[-0.02em] text-[var(--color-text)]">Where {pod.name} spends</h4>
+                    </div>
+                    <span className="whitespace-nowrap text-[0.8125rem] tabular-nums text-[var(--color-muted)]">{money(pod.total)} / month</span>
                   </div>
-                  <div className={styles.compositionBar} aria-label={`${pod.name} resource cost composition`}>
+
+                  <div className="flex h-[0.8rem] overflow-hidden rounded-full bg-[var(--color-muted-surface)]" aria-label={`${pod.name} resource cost composition`}>
                     {resourceMix.map((item, index) => (
                       <motion.span
                         key={item.key}
-                        className={styles.compositionSegment}
+                        className="block min-w-1 origin-left border-r border-[var(--color-surface)] bg-[var(--color-accent)] last:border-r-0"
                         style={{ flexGrow: Math.max(item.value, 1) }}
                         title={`${item.label}: ${money(item.value)} (${item.share}%)`}
                         initial={reduceMotion ? false : { scaleX: 0 }}
@@ -175,9 +200,14 @@ export default function CostExplorer() {
                       />
                     ))}
                   </div>
-                  <div className={styles.compositionLegend}>
+
+                  <div className="mt-3 grid grid-cols-5 gap-2 max-[768px]:grid-cols-3 max-[480px]:grid-cols-2 max-[480px]:gap-x-3 max-[480px]:gap-y-2">
                     {resourceMix.map((item) => (
-                      <div key={item.key}><i aria-hidden="true" /><span>{item.label}</span><strong>{item.share}%</strong></div>
+                      <div key={item.key} className="grid min-w-0 grid-cols-[auto_1fr_auto] items-center gap-[0.35rem] text-xs text-[var(--color-muted)]">
+                        <i className="h-[0.45rem] w-[0.45rem] rounded-full bg-[var(--color-accent)]" aria-hidden="true" />
+                        <span className="overflow-hidden text-ellipsis whitespace-nowrap">{item.label}</span>
+                        <strong className="tabular-nums text-[var(--color-text)]">{item.share}%</strong>
+                      </div>
                     ))}
                   </div>
                 </motion.div>
@@ -203,18 +233,20 @@ export default function CostExplorer() {
                   onActiveChange={setActiveId}
                 />
               </motion.div>
-              <motion.div className={styles.panelNote} {...reveal(0.5, 8)}>
+
+              <motion.div className="mt-4 flex flex-wrap justify-between gap-3 border-t border-[var(--color-border)] pt-3 text-sm text-[var(--color-muted)] max-[480px]:flex-col max-[480px]:items-start max-[480px]:gap-2" {...reveal(0.5, 8)}>
                 <span>{pod ? 'Use the breadcrumb above to go back.' : 'Hover to compare. Click any table row to drill into the next layer.'}</span>
                 <span>{isFetching ? 'Updating…' : 'All amounts in USD'}</span>
               </motion.div>
-              <p className="srOnly" role="status" aria-live="polite">Showing {rows.length} {level.plural.toLowerCase()}{current ? ` in ${current.name}` : ''}.</p>
+              <p className="sr-only" role="status" aria-live="polite">Showing {rows.length} {level.plural.toLowerCase()}{current ? ` in ${current.name}` : ''}.</p>
             </>
           )}
         </div>
       </motion.div>
+
       <motion.ol
         ref={guideRef}
-        className={styles.guide}
+        className="my-8 grid list-none grid-cols-3 gap-6 p-0 max-[768px]:gap-2 max-[480px]:my-6 max-[480px]:grid-cols-1"
         aria-label="The three cost layers"
         initial="hidden"
         animate={guideInView || reduceMotion ? 'show' : 'hidden'}
@@ -223,26 +255,36 @@ export default function CostExplorer() {
           show: { transition: { staggerChildren: reduceMotion ? 0 : 0.08, delayChildren: reduceMotion ? 0 : 0.05 } },
         }}
       >
-        {levels.map((item, index) => (
-          <motion.li
-            key={item.name}
-            aria-current={index === Math.min(trail.length, levels.length - 1) ? 'step' : undefined}
-            variants={{
-              hidden: reduceMotion ? {} : { opacity: 0, y: 12 },
-              show: reduceMotion ? {} : { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
-            }}
-            whileHover={!reduceMotion ? { y: -2, transition: { duration: 0.16, ease: easeOut } } : undefined}
-          >
-            <div><h3>{item.name}</h3><p>{item.hint}</p></div>
-          </motion.li>
-        ))}
+        {levels.map((item, index) => {
+          const currentStep = index === Math.min(trail.length, levels.length - 1);
+          return (
+            <motion.li
+              key={item.name}
+              aria-current={currentStep ? 'step' : undefined}
+              className={`flex items-start gap-3 rounded-[0.875rem] border p-4 transition-[background-color,border-color,box-shadow] duration-150 ease-out hover:border-[var(--color-border-strong)] hover:bg-[var(--color-surface-hover)] hover:shadow-[var(--shadow-soft)] max-[480px]:p-3 ${currentStep ? 'border-[var(--color-border)] bg-[var(--color-surface)] shadow-[var(--shadow-soft)]' : 'border-transparent bg-[var(--color-surface)]'}`}
+              variants={{
+                hidden: reduceMotion ? {} : { opacity: 0, y: 12 },
+                show: reduceMotion ? {} : { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
+              }}
+              whileHover={!reduceMotion ? { y: -2, transition: { duration: 0.16, ease: easeOut } } : undefined}
+            >
+              <div>
+                <h3 className="text-sm font-bold text-[var(--color-text)]">{item.name}</h3>
+                <p className="mt-1 text-sm text-[var(--color-muted)]">{item.hint}</p>
+              </div>
+            </motion.li>
+          );
+        })}
       </motion.ol>
+
       <motion.p
-        className={styles.disclosure}
+        className="mx-auto max-w-[45rem] text-center text-sm text-[var(--color-muted)] max-[480px]:px-1 max-[480px]:text-[0.8125rem]"
         initial={reduceMotion ? false : { opacity: 0, y: 8 }}
         animate={{ opacity: guideInView || reduceMotion ? 1 : 0, y: guideInView || reduceMotion ? 0 : 8 }}
         transition={{ duration: reduceMotion ? 0 : 0.4, delay: reduceMotion ? 0 : 0.32, ease: easeOut }}
-      >Every cloud dollar has a path. Follow it from cluster to pod.</motion.p>
+      >
+        Every cloud dollar has a path. Follow it from cluster to pod.
+      </motion.p>
     </section>
   );
 }

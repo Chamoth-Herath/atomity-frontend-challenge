@@ -1,6 +1,6 @@
 # Atomity — Cost Explorer
 
-A small, interactive cloud cost explorer built with **React, Framer Motion, JavaScript, and CSS Modules**.
+A small, interactive cloud cost explorer built with **React, Framer Motion, JavaScript, and Tailwind CSS**.
 
 ## Feature choice
 
@@ -13,7 +13,7 @@ This version keeps that flow and turns it into a connected inspection experience
 Install Node.js **22.12 or newer**. Open a terminal in this folder, beside `package.json`:
 
 ```bash
-npm ci
+npm install
 npm run dev
 ```
 
@@ -40,7 +40,7 @@ npm run preview # Open the production build locally
 | `src/data/costs.js` | Fetches, checks, groups, and adds up API data |
 | `src/data/queryClient.js` | Shared request cache settings |
 | `src/hooks/useCosts.js` | Gives the component its query state |
-| `src/tokens.css` | Shared colors, spacing, corners, and typeface |
+| `src/app.css` | Tailwind import, light/dark theme tokens, and global accessibility rules |
 | `tests/` | Focused tests for totals, invalid data, and request reuse |
 
 The flow is: **API → cost groups → cached query → explorer → chart and table**. Only two selected group IDs are stored in React state. Both views use the same rows, so their amounts stay in sync.
@@ -65,13 +65,11 @@ Transforms and opacity do the main work, using an ease-out curve for entrances a
 
 ## Styles and accessibility
 
-All component colors reference variables in `tokens.css`. Dark mode overrides the same variables. CSS Modules keep each component's styles local. The only fixed colors outside the token file are in the standalone favicon asset.
+The UI is styled with **Tailwind CSS v4 utilities directly in the React components**. `src/app.css` stays intentionally small: it imports Tailwind, defines the shared light/dark color tokens, and contains only global base/accessibility rules. The theme toggle changes the same CSS variables, so the utility classes do not need separate light and dark copies.
 
-Container queries adapt the feature at 48 rem and 30 rem. Native CSS nesting keeps related rules together. `:has()` highlights a table row when its button is hovered or focused. `color-mix()` makes the panel shadow. Logical properties and `clamp()` handle spacing and fluid sizing.
+Responsive utilities target the review widths used in this challenge, including compact behavior around **768 px** and **375 px**. The detailed table stays inside the same visual width as the chart and does not use a horizontal scrollbar; typography and spacing compress on smaller screens so the cost columns remain visible.
 
-The layout is designed for desktop, 768 px tablet, and 375 px mobile. The detailed table stays inside the same visual width as the chart and does not use a horizontal scrollbar. At tablet and phone widths, type and spacing compress carefully so every cost column remains visible.
-
-The page uses semantic headings, a section, breadcrumb navigation, and a real table. Interactive chart bars and resource names are native buttons. Focus moves to the new layer heading after navigation. Screen readers receive the final total instead of every animation frame. Both themes have visible focus styles and readable text contrast.
+The page uses semantic headings, a section, breadcrumb navigation, and a real table. Chart drill-down uses native buttons. Clickable table rows also support **Enter** and **Space**, focus moves to the new layer heading after navigation, and screen readers receive the final numeric value instead of every animation frame. Both themes keep visible focus states and readable contrast.
 
 ## Libraries and decisions
 
@@ -79,14 +77,14 @@ The page uses semantic headings, a section, breadcrumb navigation, and a real ta
 - **Framer Motion:** scroll entrances, bar motion, and number counting.
 - **TanStack Query:** shared async state, retries, and request caching.
 - **Vite / its React plugin:** local development and production builds.
-- **CSS Modules:** component styles without another styling dependency.
+- **Tailwind CSS:** component styles without another styling dependency.
 - **Node's built-in test runner:** a few useful tests without another test library.
 
 The app was written from an empty folder. No UI kit, site template, chart library, or pre-made components are used. JavaScript keeps the scope small and follows the requested stack. The chart intentionally has only four bars per level. A real backend, date filtering, and a full dashboard would make this challenge larger than it needs to be.
 
 ## Validation and next improvements
 
-The cost-calculation test suite and source syntax checks pass in this build environment. The project still includes the cache tests; run `npm ci`, `npm test`, and `npm run build` locally before submission to verify the installed dependencies, browser layout, keyboard interaction, and live API response. `SUBMIT.md` contains the short manual check to run before submitting.
+The cost-calculation test suite and source syntax checks pass in this build environment. The project still includes the cache tests; run `npm install`, `npm test`, and `npm run build` locally before submission to verify the installed dependencies, browser layout, keyboard interaction, and live API response. `SUBMIT.md` contains the short manual check to run before submitting.
 
 With more time: connect a real cloud-cost API, add browser tests for navigation and reduced motion, then consider TypeScript for the response and resource types.
 

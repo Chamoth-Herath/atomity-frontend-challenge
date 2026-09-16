@@ -9,7 +9,7 @@ Open **Terminal → New Terminal**. Make sure `package.json` is visible in this 
 Install [Node.js](https://nodejs.org/en/download) version 22.12 or newer, then run:
 
 ```bash
-npm ci
+npm install
 npm run dev
 ```
 
@@ -81,7 +81,7 @@ Replace both bracketed links in this message:
 ```text
 Hello Team Atomity,
 
-Please find my Frontend Engineering Challenge submission below. I chose Option A and used React, Framer Motion, JavaScript, and CSS Modules.
+Please find my Frontend Engineering Challenge submission below. I chose Option A and used React, Framer Motion, JavaScript, and Tailwind CSS.
 
 GitHub repository: [your public GitHub repository link]
 Live demo: [your public live demo link]

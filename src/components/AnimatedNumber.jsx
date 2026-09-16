@@ -26,7 +26,7 @@ export default function AnimatedNumber({ value, format, active }) {
   return (
     <>
       <span ref={textRef} aria-hidden="true">{format(value)}</span>
-      <span className="srOnly">{format(value)}</span>
+      <span className="sr-only">{format(value)}</span>
     </>
   );
 }
