@@ -125,6 +125,6 @@ I would connect the interface to a real cloud-cost API, add browser-level tests 
 
 ## Development note
 
-I used AI tools for some implementation support while working through the challenge. I reviewed the final code, tested the main logic, and can explain the structure and decisions used in the project.
+I used AI as a support tool for parts of the implementation. I reviewed and tested the final code, and I can explain how the main pieces work and why I made the design decisions in this project.
 
 See `SUBMIT.md` for the final GitHub and deployment checklist.
