@@ -166,3 +166,20 @@
     font-size: 0.8125rem;
   }
 }
+
+/* Intentional interaction motion: subtle feedback, no bounce. */
+.guide li {
+  transition:
+    transform var(--duration-fast) var(--ease-out),
+    border-color var(--duration-fast) var(--ease-out),
+    box-shadow var(--duration-fast) var(--ease-out),
+    background var(--duration-fast) var(--ease-out);
+}
+.guide li:hover {
+  border-color: var(--color-border);
+  box-shadow: 0 8px 20px color-mix(in srgb, var(--color-ink) 6%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .guide li { transition: none; }
+}

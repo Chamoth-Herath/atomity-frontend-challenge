@@ -125,3 +125,10 @@
     padding-block: var(--space-6);
   }
 }
+
+.description {
+  max-inline-size: 46rem;
+  margin-inline: auto;
+  line-height: 1.65;
+  text-wrap: balance;
+}

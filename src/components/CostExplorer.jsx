@@ -16,13 +16,17 @@ const levels = [
   { name: 'Pod', plural: 'Pods', hint: 'A small unit that runs an app', action: 'You’ve reached the individual apps. Compare their costs below.' },
 ];
 
+const easeOut = [0.22, 1, 0.36, 1];
+
 export default function CostExplorer() {
   const { data, isPending, isError, isFetching, fetchStatus, refetch } = useCosts();
   const [path, setPath] = useState([]);
   const sectionRef = useRef(null);
+  const guideRef = useRef(null);
   const titleRef = useRef(null);
   const focusAfterNavigation = useRef(false);
   const inView = useInView(sectionRef, { once: true, amount: 0.12 });
+  const guideInView = useInView(guideRef, { once: true, amount: 0.35 });
   const reduceMotion = useReducedMotion();
 
   const clusters = data ?? [];
@@ -38,6 +42,7 @@ export default function CostExplorer() {
   const total = sumCosts(rows);
   const rootTotal = sumCosts(clusters).total;
   const biggest = rows.reduce((best, row) => !best || row.total > best.total ? row : best, null);
+  const biggestShare = biggest ? percent(biggest.total, total.total) : 0;
 
   function navigate(nextPath) {
     focusAfterNavigation.current = true;
@@ -56,75 +61,105 @@ export default function CostExplorer() {
   else if (isError && !data) state = 'error';
   else if (!clusters.length) state = 'empty';
 
+  const reveal = (delay = 0, y = 14) => ({
+    initial: reduceMotion ? false : { opacity: 0, y },
+    animate: { opacity: inView || reduceMotion ? 1 : 0, y: inView || reduceMotion ? 0 : y },
+    transition: { duration: reduceMotion ? 0 : 0.48, delay: reduceMotion ? 0 : delay, ease: easeOut },
+  });
+
   return (
     <section id="explorer" ref={sectionRef} className={styles.section} aria-labelledby="explorer-title">
-      <div className={styles.sectionHeading}>
+      <motion.div className={styles.sectionHeading} {...reveal(0)}>
         <div><p className={styles.eyebrow}>FOLLOW THE COST</p><h2 id="explorer-title">One bill. Every layer.</h2></div>
-        <span className={styles.demoBadge}>Example data · USD / month</span>
-      </div>
+      </motion.div>
       <motion.div
         className={styles.panel}
-        initial={reduceMotion ? false : { opacity: 0, y: 20 }}
-        animate={{ opacity: inView || reduceMotion ? 1 : 0, y: inView || reduceMotion ? 0 : 20 }}
-        transition={{ duration: reduceMotion ? 0 : 0.5, ease: [0.22, 1, 0.36, 1] }}
+        initial={reduceMotion ? false : { opacity: 0, y: 20, scale: 0.995 }}
+        animate={{ opacity: inView || reduceMotion ? 1 : 0, y: inView || reduceMotion ? 0 : 20, scale: 1 }}
+        transition={{ duration: reduceMotion ? 0 : 0.55, delay: reduceMotion ? 0 : 0.08, ease: easeOut }}
         aria-busy={isPending && fetchStatus !== 'paused'}
       >
-        <div className={styles.panelHeader}>
+        <motion.div className={styles.panelHeader} {...reveal(0.14, 8)}>
           <Breadcrumbs trail={trail} onBack={(index) => navigate(path.slice(0, index))} />
           <span className={styles.step}>LAYER 0{Math.min(trail.length + 1, 3)} / 03</span>
-        </div>
+        </motion.div>
         <div className={styles.panelBody}>
           {state ? <StatusView state={state} onRetry={() => refetch()} retrying={isFetching} /> : (
             <>
               {isError && <p className={styles.refreshError} role="status">The update failed. Your last loaded costs are still shown. <button onClick={() => refetch()} disabled={isFetching}>Try again</button></p>}
               <div className={styles.summary}>
-                <div className={styles.primaryMetric}>
+                <motion.div className={styles.primaryMetric} {...reveal(0.2, 10)}>
                   <p>{current ? `${current.name} cost` : 'Total monthly cost'}</p>
                   <strong><AnimatedNumber value={total.total} format={money} active={inView} /></strong>
-                  <span>{current ? `${percent(total.total, rootTotal)}% of the full example bill` : `${total.podCount} pods across ${clusters.length} clusters`}</span>
-                </div>
-                <div className={styles.metric}>
+                  <span>{current ? `${percent(total.total, rootTotal)}% of the full bill` : `${total.podCount} pods across ${clusters.length} clusters`}</span>
+                </motion.div>
+                <motion.div className={styles.metric} {...reveal(0.27, 10)}>
                   <p>Resources in this view</p>
-                  <strong>{rows.length} <span>{level.plural.toLowerCase()}</span></strong>
+                  <strong><AnimatedNumber value={rows.length} format={(value) => Math.round(value)} active={inView} /> <span>{level.plural.toLowerCase()}</span></strong>
                   <span>{level.hint}</span>
-                </div>
-                <div className={styles.insight}>
+                </motion.div>
+                <motion.div className={styles.insight} {...reveal(0.34, 10)}>
                   <p>Largest share</p>
-                  <strong>{percent(biggest.total, total.total)}<span>%</span></strong>
-                  <span>{total.total > 0 ? `${biggest.name} leads this view` : 'No spend in this view'}</span>
-                </div>
+                  <strong><AnimatedNumber value={biggestShare} format={(value) => Math.round(value)} active={inView} /><span>%</span></strong>
+                  <span>{total.total > 0 && biggest ? `${biggest.name} leads this view` : 'No spend in this view'}</span>
+                </motion.div>
               </div>
-              <div className={styles.chartHeading}>
+              <motion.div className={styles.chartHeading} {...reveal(0.4, 10)}>
                 <div>
                   <h3 ref={titleRef} tabIndex={-1}>{level.plural}</h3>
                   <p>{level.action}</p>
                 </div>
                 <span className={styles.legend}><i aria-hidden="true" /> Monthly cost</span>
-              </div>
+              </motion.div>
               <motion.div
                 key={current?.id ?? 'all'}
-                initial={reduceMotion ? false : { opacity: 0, y: 6 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: reduceMotion ? 0 : 0.25 }}
+                initial={reduceMotion ? false : { opacity: 0, y: 10, scale: 0.997 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                transition={reduceMotion ? { duration: 0 } : { type: 'spring', stiffness: 260, damping: 28, mass: 0.8 }}
               >
                 <BarChart rows={rows} onExplore={pod ? undefined : (row) => navigate([...path, row.id])} />
                 <ResourceTable rows={rows} type={level.name} onExplore={pod ? undefined : (row) => navigate([...path, row.id])} />
               </motion.div>
-              <div className={styles.panelNote}>
+              <motion.div className={styles.panelNote} {...reveal(0.5, 8)}>
                 <span>{current ? 'Use the breadcrumb above to go back.' : 'Select any chart bar or resource name to look closer.'}</span>
                 <span>{isFetching ? 'Updating…' : 'All amounts in USD'}</span>
-              </div>
+              </motion.div>
               <p className="srOnly" role="status" aria-live="polite">Showing {rows.length} {level.plural.toLowerCase()}{current ? ` in ${current.name}` : ''}.</p>
             </>
           )}
         </div>
       </motion.div>
-      <ol className={styles.guide} aria-label="The three cost layers">
-        {levels.map((item, index) => <li key={item.name} aria-current={index === Math.min(trail.length, levels.length - 1) ? 'step' : undefined}>
-          <div><h3>{item.name}</h3><p>{item.hint}</p></div>
-        </li>)}
-      </ol>
-      <p className={styles.disclosure}>A sample bill for exploring, not a real cloud account. Costs and efficiency are calculated from <a href="https://dummyjson.com/docs/products" target="_blank" rel="noreferrer">DummyJSON product data<span className="srOnly"> (opens in a new tab)</span></a>.</p>
+      <motion.ol
+        ref={guideRef}
+        className={styles.guide}
+        aria-label="The three cost layers"
+        initial="hidden"
+        animate={guideInView || reduceMotion ? 'show' : 'hidden'}
+        variants={{
+          hidden: {},
+          show: { transition: { staggerChildren: reduceMotion ? 0 : 0.08, delayChildren: reduceMotion ? 0 : 0.05 } },
+        }}
+      >
+        {levels.map((item, index) => (
+          <motion.li
+            key={item.name}
+            aria-current={index === Math.min(trail.length, levels.length - 1) ? 'step' : undefined}
+            variants={{
+              hidden: reduceMotion ? {} : { opacity: 0, y: 12 },
+              show: reduceMotion ? {} : { opacity: 1, y: 0, transition: { duration: 0.4, ease: easeOut } },
+            }}
+            whileHover={!reduceMotion ? { y: -2, transition: { duration: 0.16, ease: easeOut } } : undefined}
+          >
+            <div><h3>{item.name}</h3><p>{item.hint}</p></div>
+          </motion.li>
+        ))}
+      </motion.ol>
+      <motion.p
+        className={styles.disclosure}
+        initial={reduceMotion ? false : { opacity: 0, y: 8 }}
+        animate={{ opacity: guideInView || reduceMotion ? 1 : 0, y: guideInView || reduceMotion ? 0 : 8 }}
+        transition={{ duration: reduceMotion ? 0 : 0.4, delay: reduceMotion ? 0 : 0.32, ease: easeOut }}
+      >Every cloud dollar has a path. Follow it from cluster to pod.</motion.p>
     </section>
   );
 }

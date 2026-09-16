@@ -16,9 +16,9 @@ export default function App() {
       <main id="top" className={styles.main}>
         <div className={styles.intro}>
           <p className={styles.eyebrow}>CLOUD COST EXPLORER</p>
-          <h1>A clear view.<br />Down to the <span>last pod.</span></h1>
-          <p className={styles.description}>See where your cloud spend goes.<br />Start with a cluster. Keep exploring.</p>
-          <a className={styles.exploreButton} href="#explorer">Explore the costs <span aria-hidden="true">↓</span></a>
+          <h1>Find where your cloud <span>money goes.</span></h1>
+          <p className={styles.description}>Start with a cluster, drill into a namespace, select a pod, and see exactly how its resource costs are distributed.</p>
+          <a className={styles.exploreButton} href="#explorer">Explore the costs</a>
         </div>
         <CostExplorer />
       </main>

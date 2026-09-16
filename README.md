@@ -57,9 +57,11 @@ The request times out after 10 seconds and retries once on failure. Loading, off
 
 ## Animation
 
-Framer Motion's `useInView` triggers the panel entrance when the section enters the viewport. The chart has its own observer, so its bars wait until the chart is visible. Bars grow from the bottom with an 80 ms stagger. The total counts over 650 ms, and a change of layer uses a short fade. Hover feedback changes color without shifting the layout.
+Motion is deliberately staged instead of starting everything at once. Framer Motion's `useInView` reveals the explorer heading and panel first, then staggers the summary metrics and chart heading. The chart has its own observer, so each column fades in and each bar grows from the bottom with a short stagger. Table rows reveal in sequence when the table enters view, and the three explanatory layer cards use a separate scroll-triggered stagger lower on the page.
 
-Transforms and opacity handle the main animations. `useReducedMotion`, `MotionConfig`, and a CSS media query remove motion when requested. The final data remains visible. There is no scroll hijacking or looping decoration; only the loading placeholder pulses while a request is pending.
+Key numeric values count smoothly: total monthly cost, resource count, largest-share percentage, and chart value labels. Moving between cluster, namespace, and pod views uses a tightly damped spring so the transition feels responsive without bounce or overshoot. Hover feedback stays subtle: chart items lift slightly with a soft shadow, table rows highlight as a whole, and guide cards move only a couple of pixels.
+
+Transforms and opacity do the main work, using an ease-out curve for entrances and a controlled spring for layer changes. `useReducedMotion`, `MotionConfig`, and the CSS `prefers-reduced-motion` media query remove motion when requested. There is no scroll hijacking, looping decoration, or animation added only for decoration; only the loading placeholder pulses while a request is pending.
 
 ## Styles and accessibility
 
