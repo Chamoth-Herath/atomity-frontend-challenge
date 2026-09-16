@@ -28,10 +28,13 @@ export default function CostExplorer() {
   const clusters = data ?? [];
   const cluster = clusters.find((item) => item.id === path[0]);
   const namespace = cluster?.children.find((item) => item.id === path[1]);
-  const trail = [cluster, namespace].filter(Boolean);
-  const current = namespace ?? cluster;
-  const rows = current?.children ?? clusters;
-  const level = levels[trail.length];
+  const pod = namespace?.children.find((item) => item.id === path[2]);
+  const trail = [cluster, namespace, pod].filter(Boolean);
+  const current = pod ?? namespace ?? cluster;
+  const rows = pod ? [pod] : current?.children ?? clusters;
+  const level = pod
+    ? { name: 'Pod', plural: 'Pod', hint: 'An individual app workload', action: 'Review the monthly cost for this pod.' }
+    : levels[trail.length];
   const total = sumCosts(rows);
   const rootTotal = sumCosts(clusters).total;
   const biggest = rows.reduce((best, row) => !best || row.total > best.total ? row : best, null);
@@ -68,7 +71,7 @@ export default function CostExplorer() {
       >
         <div className={styles.panelHeader}>
           <Breadcrumbs trail={trail} onBack={(index) => navigate(path.slice(0, index))} />
-          <span className={styles.step}>LAYER 0{trail.length + 1} / 03</span>
+          <span className={styles.step}>LAYER 0{Math.min(trail.length + 1, 3)} / 03</span>
         </div>
         <div className={styles.panelBody}>
           {state ? <StatusView state={state} onRetry={() => refetch()} retrying={isFetching} /> : (
@@ -104,8 +107,8 @@ export default function CostExplorer() {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: reduceMotion ? 0 : 0.25 }}
               >
-                <BarChart rows={rows} onExplore={(row) => navigate([...path, row.id])} />
-                <ResourceTable rows={rows} type={level.name} onExplore={(row) => navigate([...path, row.id])} />
+                <BarChart rows={rows} onExplore={pod ? undefined : (row) => navigate([...path, row.id])} />
+                <ResourceTable rows={rows} type={level.name} onExplore={pod ? undefined : (row) => navigate([...path, row.id])} />
               </motion.div>
               <div className={styles.panelNote}>
                 <span>{current ? 'Use the breadcrumb above to go back.' : 'Select any chart bar or resource name to look closer.'}</span>
@@ -117,8 +120,7 @@ export default function CostExplorer() {
         </div>
       </motion.div>
       <ol className={styles.guide} aria-label="The three cost layers">
-        {levels.map((item, index) => <li key={item.name} aria-current={index === trail.length ? 'step' : undefined}>
-          <span className={styles.guideNumber}>0{index + 1}</span>
+        {levels.map((item, index) => <li key={item.name} aria-current={index === Math.min(trail.length, levels.length - 1) ? 'step' : undefined}>
           <div><h3>{item.name}</h3><p>{item.hint}</p></div>
         </li>)}
       </ol>

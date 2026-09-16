@@ -18,9 +18,9 @@ export default function ResourceTable({ rows, onExplore, type }) {
             {rows.map((row) => (
               <tr key={row.id}>
                 <th scope="row">
-                  {row.children
-                    ? <button className={styles.resource} onClick={() => onExplore(row)}>{row.name}<span aria-hidden="true"> ↗</span></button>
-                    : <span className={styles.pod} title={`Sample source: ${row.sourceTitle}`}>{row.name}</span>}
+                  {onExplore && (row.children || row.type === 'pod')
+                    ? <button className={styles.resource} onClick={() => onExplore(row)} title={row.type === 'pod' ? `Sample source: ${row.sourceTitle}` : undefined}>{row.name}<span aria-hidden="true"> ↗</span></button>
+                    : <span className={styles.pod} title={row.sourceTitle ? `Sample source: ${row.sourceTitle}` : undefined}>{row.name}</span>}
                 </th>
                 {costColumns.map(({ key }) => <td key={key}>{money(row[key])}</td>)}
                 <td><span className={styles.efficiency}>{efficiency(row)}%</span></td>

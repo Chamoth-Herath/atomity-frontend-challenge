@@ -15,7 +15,7 @@ export default function BarChart({ rows, onExplore }) {
       <div className={styles.grid} aria-hidden="true"><span /><span /><span /><span /></div>
       <div className={styles.columns}>
         {rows.map((row, index) => {
-          const canExplore = Boolean(row.children);
+          const canExplore = Boolean(onExplore) && (Boolean(row.children) || row.type === 'pod');
           const Element = canExplore ? 'button' : 'div';
           return (
             <Element
