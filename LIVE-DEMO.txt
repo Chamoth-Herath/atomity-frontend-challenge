@@ -1,7 +1,3 @@
-Final live demo URL
+Live Demo
 
-Deploy this exact Tailwind version from the final GitHub repository, then paste the public URL here before submission.
-
-Do not submit an older demo URL from an earlier CSS Modules build.
-
-See SUBMIT.md for the final deployment and verification checklist.
+https://atomity-frontend-challenge-eta.vercel.app/
