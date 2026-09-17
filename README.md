@@ -123,8 +123,6 @@ I kept the challenge focused on one polished section. The API does not provide r
 
 I would connect the interface to a real cloud-cost API, add browser-level tests for the full drill-down flow, and move the data models to TypeScript. I would also test more real-world datasets and edge cases beyond the challenge demo.
 
-## Development note
 
-I used AI as a support tool for parts of the implementation. I reviewed and tested the final code, and I can explain how the main pieces work and why I made the design decisions in this project.
 
-See `SUBMIT.md` for the final GitHub and deployment checklist.
+
